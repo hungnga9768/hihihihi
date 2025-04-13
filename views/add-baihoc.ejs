@@ -11,127 +11,133 @@
   <section class="content">
     <!-- Default box -->
     <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">Thêm mới bài học</h3>
-        <a href="/admin/baihoc/danhsach" class="btn btn-default pull-right"
-          >Quay lại danh sách</a
-        >
-      </div>
-
-      <div class="box-body">
-        <form action="/admin/baihoc/add-baihoc" method="POST">
-          <!-- ID Khóa học -->
-          <div class="form-group">
-            <label for="course_id">Khóa học</label>
-            <select
-              class="form-control"
-              id="course_id"
-              name="course_id"
-              required
+      <div class="card">
+        <div class="card-header">
+          <div
+            class="box-header with-border d-flex justify-content-between align-items-center"
+          >
+            <h3 class="card-title mb-0">Thêm mới bài học</h3>
+            <a href="/admin/baihoc/danhsach" class="btn btn-default"
+              >Quay lại danh sách</a
             >
-              <% courses.forEach(function(course) { %>
-              <option value="<%= course.course_id %>">
-                <%= course.title %>
-              </option>
-              <% }) %>
-            </select>
           </div>
+        </div>
+        <div class="card-body">
+          <form action="/admin/baihoc/add-baihoc" method="POST">
+            <!-- ID Khóa học -->
+            <div class="form-group">
+              <label for="course_id">Khóa học</label>
+              <select
+                class="form-control"
+                id="course_id"
+                name="course_id"
+                required
+              >
+                <% courses.forEach(function(course) { %>
+                <option value="<%= course.course_id %>">
+                  <%= course.title %>
+                </option>
+                <% }) %>
+              </select>
+            </div>
 
-          <!-- Tiêu đề bài học -->
-          <div class="form-group">
-            <label for="title">Tiêu đề bài học</label>
-            <input
-              type="text"
-              class="form-control"
-              id="title"
-              name="title"
-              value="Giới thiệu bảng chữ cái"
-              required
-            />
-          </div>
+            <!-- Tiêu đề bài học -->
+            <div class="form-group">
+              <label for="title">Tiêu đề bài học</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                name="title"
+                value="Giới thiệu bảng chữ cái"
+                required
+              />
+            </div>
 
-          <!-- Mô tả bài học -->
-          <div class="form-group">
-            <label for="description">Mô tả</label>
-            <textarea
-              class="form-control"
-              id="description"
-              name="description"
-              rows="4"
-            >
+            <!-- Mô tả bài học -->
+            <div class="form-group">
+              <label for="description">Mô tả</label>
+              <textarea
+                class="form-control"
+                id="description"
+                name="description"
+                rows="4"
+              >
 Bài học này giúp bạn làm quen với bảng chữ cái tiếng Trung.</textarea
-            >
-          </div>
+              >
+            </div>
 
-          <!-- Loại nội dung -->
-          <div class="form-group">
-            <label for="content_type">Loại nội dung</label>
-            <select
-              class="form-control"
-              id="content_type"
-              name="content_type"
-              required
-            >
-              <option value="video" selected>Video</option>
-              <option value="text">Văn bản</option>
-              <option value="quiz">Câu hỏi trắc nghiệm</option>
-              <option value="interactive">Tương tác</option>
-            </select>
-          </div>
+            <!-- Loại nội dung -->
+            <div class="form-group">
+              <label for="content_type">Loại nội dung</label>
+              <select
+                class="form-control"
+                id="content_type"
+                name="content_type"
+                required
+              >
+                <option value="video" selected>Video</option>
+                <option value="text">Văn bản</option>
+                <option value="quiz">Câu hỏi trắc nghiệm</option>
+                <option value="interactive">Tương tác</option>
+              </select>
+            </div>
 
-          <!-- Đường dẫn nội dung -->
-          <div class="form-group">
-            <label for="content_url">Đường dẫn nội dung</label>
-            <input
-              type="text"
-              class="form-control"
-              id="content_url"
-              name="content_url"
-              value="https://example.com/video/bang-chu-cai.mp4"
-              required
-            />
-          </div>
+            <!-- Đường dẫn nội dung -->
+            <div class="form-group">
+              <label for="content_url">Đường dẫn nội dung</label>
+              <input
+                type="text"
+                class="form-control"
+                id="content_url"
+                name="content_url"
+                value="https://example.com/video/bang-chu-cai.mp4"
+                required
+              />
+            </div>
 
-          <!-- Thời lượng -->
-          <div class="form-group">
-            <label for="duration">Thời lượng (phút)</label>
-            <input
-              type="number"
-              class="form-control"
-              id="duration"
-              name="duration"
-              value="10"
-              required
-            />
-          </div>
+            <!-- Thời lượng -->
+            <div class="form-group">
+              <label for="duration">Thời lượng (phút)</label>
+              <input
+                type="number"
+                class="form-control"
+                id="duration"
+                name="duration"
+                value="10"
+                required
+              />
+            </div>
 
-          <!-- Thứ tự hiển thị -->
-          <div class="form-group">
-            <label for="display_order">Thứ tự hiển thị</label>
-            <input
-              type="number"
-              class="form-control"
-              id="display_order"
-              name="display_order"
-              value="1"
-              required
-            />
-          </div>
-          <!-- Có cho xem trước không -->
-          <div class="form-group">
-            <label for="is_preview">Cho xem trước?</label><br />
-            <label class="radio-inline">
-              <input type="radio" name="is_preview" value="1" checked /> Có
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="is_preview" value="0" /> Không
-            </label>
-          </div>
-
+            <!-- Thứ tự hiển thị -->
+            <div class="form-group">
+              <label for="display_order">Thứ tự hiển thị</label>
+              <input
+                type="number"
+                class="form-control"
+                id="display_order"
+                name="display_order"
+                value="1"
+                required
+              />
+            </div>
+            <!-- Có cho xem trước không -->
+            <div class="form-group">
+              <label for="is_preview">Cho xem trước?</label><br />
+              <label class="radio-inline">
+                <input type="radio" name="is_preview" value="1" checked /> Có
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="is_preview" value="0" /> Không
+              </label>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer text-muted">
           <button type="submit" class="btn btn-primary">
             <i class="fa fa-save"></i> Lưu bài học
           </button>
-        </form>
+        </div>
       </div>
     </div>
   </section>

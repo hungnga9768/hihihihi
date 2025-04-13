@@ -38,9 +38,9 @@
           <!-- Có thể hiển thị ảnh cũ -->
           <div class="form-group">
             <label>Ảnh hiện tại:</label><br />
-            <img src="<%= course.thumbnail_url %>" width="150" />
+            <img id="currentImage" src="<%= course.thumbnail_url %>" width="150" class="img-thumbnail" />
           </div>
-        
+          
           <div class="form-group">
             <label for="thumbnail">Chọn ảnh mới (nếu muốn đổi)</label>
             <input
@@ -49,9 +49,10 @@
               id="thumbnail"
               name="thumbnail"
               accept="image/*"
+              onchange="showImage(event)"
             />
           </div>
-        
+          
           <div class="form-group">
             <label for="exampleSelect">Chọn cấp độ HSK</label>
             <select class="form-control" id="exampleSelect" name="difficulty_level">
@@ -128,3 +129,17 @@
   </section>
 </div>
 <%- include('footer')%>
+<script>
+  function showImage(event) {
+    const input = event.target;
+    const currentImage = document.getElementById("currentImage");
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        currentImage.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>

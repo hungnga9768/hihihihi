@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const upload = require("../../middlewares/upload");
 const baihocCtrl = require("../../app/controllers/baihoc.controller");
 
 // Quản lý khóa học

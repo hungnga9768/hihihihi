@@ -54,7 +54,9 @@ module.exports = {
       res.redirect("/admin/khoahoc/danhsach");
     } catch (err) {
       console.error("Lỗi thêm khóa học:", err);
-      res.send("Lỗi thêm khóa học");
+      return res.render("error", {
+        message: "Lỗi thêm khóa học",
+      });
     }
   },
 
@@ -84,6 +86,12 @@ module.exports = {
       } = req.body;
       const is_preview = req.body.is_preview === "1" ? true : false;
       //data update
+      const isDuplicate = await Course.checkDuplicateTitle(title, id);
+      if (isDuplicate) {
+        return res.render("error", {
+          message: "Khóa học với tiêu đề này đã tồn tại.",
+        });
+      }
       const dataUpdate = {
         course_id,
         title,
@@ -99,7 +107,9 @@ module.exports = {
       res.redirect("/admin/baihoc/danhsach");
     } catch (err) {
       console.error("Lỗi cập nhật:", err);
-      res.send("Cập nhật thất bại");
+      return res.render("error", {
+        message: "Cập nhật thất bại",
+      });
     }
   },
 

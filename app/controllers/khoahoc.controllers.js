@@ -24,7 +24,7 @@ module.exports = {
 
   // Trang form thêm khóa học
   showAddForm(req, res) {
-    res.render("add-khoahoc");
+    res.render("add-khoahoc", { title: "Thêm khóa học" });
   },
 
   // Xử lý thêm khóa học

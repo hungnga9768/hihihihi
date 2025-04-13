@@ -7,13 +7,14 @@ const storage = multer.diskStorage({
     cb(null, "public/images"); // Thư mục lưu trữ ảnh
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
+    const originalName = path.parse(file.originalname).name; // tên không có đuôi
+    const ext = path.extname(file.originalname); // .jpg, .png,...
+    const uniqueSuffix = Date.now();
+    cb(null, originalName + "-" + uniqueSuffix + ext);
   },
 });
 
 // Khởi tạo multer với cấu hình storage
 const upload = multer({ storage: storage });
-
-// ✅ Export đúng
+//  Export đúng
 module.exports = upload;

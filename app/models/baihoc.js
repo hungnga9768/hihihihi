@@ -67,7 +67,7 @@ module.exports = {
   // Kiểm tra trùng tiêu đề khi sửa
   async checkDuplicateTitle(title, id) {
     const result = await query(
-      `SELECT * FROM Courses WHERE title = ? AND course_id != ?`,
+      `SELECT * FROM Lessons WHERE title = ? AND lesson_id != ?`,
       [title, id]
     );
     return result.length > 0;
