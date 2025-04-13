@@ -4,23 +4,16 @@
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
-    <h1>quản lý khóa học</h1>
+    <h1><%= title %></h1>
   </section>
 
   <!-- Main content -->
   <section class="content">
     <!-- Default box -->
     <div class="box">
-      <div class="box-header with-border">
-        <h3 class="box-title">Thêm mới bài học</h3>
-        <a href="/admin/baihoc/danhsach" class="btn btn-default pull-right"
-          >Quay lại danh sách</a
-        >
-      </div>
-
       <div class="box-body">
-        <form action="/admin/baihoc/add-baihoc" method="POST">
-          <!-- ID Khóa học -->
+        <form method="POST" action="/admin/baihoc/edit-baihoc/<%= lesson.lesson_id %>">
+          <!-- Các trường thông tin khóa học -->
           <div class="form-group">
             <label for="course_id">Khóa học</label>
             <select
@@ -30,82 +23,68 @@
               required
             >
               <% courses.forEach(function(course) { %>
-              <option value="<%= course.course_id %>">
+              <option value="<%= course.course_id %>"
+                <%= (course.course_id === lesson.course_id) ? 'selected' : '' %>>
                 <%= course.title %>
               </option>
               <% }) %>
             </select>
           </div>
 
-          <!-- Tiêu đề bài học -->
           <div class="form-group">
-            <label for="title">Tiêu đề bài học</label>
+            <label for="title">Tên bài học</label>
             <input
               type="text"
               class="form-control"
               id="title"
               name="title"
-              value="Giới thiệu bảng chữ cái"
+              value="<%= lesson.title %>"
               required
             />
           </div>
-
-          <!-- Mô tả bài học -->
+          
           <div class="form-group">
-            <label for="description">Mô tả</label>
+            <label for="description">Mô tả bài học</label>
             <textarea
               class="form-control"
               id="description"
               name="description"
-              rows="4"
-            >
-Bài học này giúp bạn làm quen với bảng chữ cái tiếng Trung.</textarea
-            >
+              rows="3"
+            ><%= lesson.description %></textarea>
           </div>
-
-          <!-- Loại nội dung -->
+          
           <div class="form-group">
             <label for="content_type">Loại nội dung</label>
-            <select
-              class="form-control"
-              id="content_type"
-              name="content_type"
-              required
-            >
-              <option value="video" selected>Video</option>
-              <option value="text">Văn bản</option>
-              <option value="quiz">Câu hỏi trắc nghiệm</option>
-              <option value="interactive">Tương tác</option>
+            <select class="form-control" id="content_type" name="content_type">
+              <option value="video" <%= lesson.content_type == 'video' ? 'selected' : '' %>>Video</option>
+              <option value="text" <%= lesson.content_type == 'text' ? 'selected' : '' %>>Text</option>
+              <option value="quiz" <%= lesson.content_type == 'quiz' ? 'selected' : '' %>>Quiz</option>
+              <option value="interactive" <%= lesson.content_type == 'interactive' ? 'selected' : '' %>>Interactive</option>
             </select>
           </div>
-
-          <!-- Đường dẫn nội dung -->
+          
           <div class="form-group">
             <label for="content_url">Đường dẫn nội dung</label>
             <input
-              type="text"
+              type="url"
               class="form-control"
               id="content_url"
               name="content_url"
-              value="https://example.com/video/bang-chu-cai.mp4"
-              required
+              value="<%= lesson.content_url %>"
             />
           </div>
-
-          <!-- Thời lượng -->
+    
           <div class="form-group">
-            <label for="duration">Thời lượng (phút)</label>
+            <label for="duration">Thời lượng bài học (phút)</label>
             <input
               type="number"
               class="form-control"
               id="duration"
               name="duration"
-              value="10"
-              required
+              value="<%= lesson.duration %>"
             />
           </div>
-
-          <!-- Thứ tự hiển thị -->
+    
           <div class="form-group">
             <label for="display_order">Thứ tự hiển thị</label>
             <input
@@ -113,27 +92,30 @@ Bài học này giúp bạn làm quen với bảng chữ cái tiếng Trung.</te
               class="form-control"
               id="display_order"
               name="display_order"
-              value="1"
-              required
+              value="<%= lesson.display_order %>"
             />
           </div>
-          <!-- Có cho xem trước không -->
+    
           <div class="form-group">
-            <label for="is_preview">Cho xem trước?</label><br />
-            <label class="radio-inline">
-              <input type="radio" name="is_preview" value="1" checked /> Có
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="is_preview" value="0" /> Không
-            </label>
+            <label for="is_preview">Hiển thị trước khi đăng?</label>
+            <select class="form-control" id="is_preview" name="is_preview">
+              <option value="1" <%= lesson.is_preview == 1 ? 'selected' : '' %>>Có</option>
+              <option value="0" <%= lesson.is_preview == 0 ? 'selected' : '' %>>Không</option>
+            </select>
           </div>
-
-          <button type="submit" class="btn btn-primary">
-            <i class="fa fa-save"></i> Lưu bài học
-          </button>
+    
+          <div class="box-footer">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-save"></i> Lưu thay đổi
+            </button>
+            <a href="/quanlykhoahoc" class="btn btn-default pull-right">
+              <i class="fa fa-reply"></i> Quay lại
+            </a>
+          </div>
         </form>
       </div>
     </div>
+    
   </section>
 </div>
 <%- include('footer')%>

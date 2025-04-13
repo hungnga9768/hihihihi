@@ -24,7 +24,7 @@
           <button type="submit" class="btn btn-primary">
             <i class="fa fa-search"></i> Tìm kiếm
           </button>
-          <a href="/admin/baihoc/add" class="btn btn-success pull-right">
+          <a href="/admin/baihoc/add-baihoc" class="btn btn-success pull-right">
             <i class="fa fa-plus"></i> Thêm bài học
           </a>
         </form>
@@ -61,13 +61,13 @@
               <td><%= lesson.display_order %></td>
               <td>
                 <a
-                  href="/admin/baihoc/edit/<%= lesson.lesson_id %>"
+                  href="/admin/baihoc/edit-baihoc/<%= lesson.lesson_id %>"
                   class="btn btn-sm btn-warning"
                 >
                   <i class="fa fa-edit"></i> Sửa
                 </a>
                 <form
-                  action="/admin/baihoc/delete/<%= lesson.lesson_id %>"
+                  action="/admin/baihoc/delete-baihoc/<%= lesson.lesson_id %>"
                   method="POST"
                   style="display: inline-block"
                   onsubmit="return confirm('Bạn có chắc muốn xóa bài học này không?');"

@@ -6,14 +6,11 @@ module.exports = {
     const search = req.query.search || "";
     const page = parseInt(req.query.page) || 1;
     const limit = 5;
-
     const totalRow = await Course.getTotalRow(search);
     const totalPage = Math.ceil(totalRow / limit);
     const baihocPage = Math.min(Math.max(page, 1), totalPage);
     const offset = (baihocPage - 1) * limit;
-
     const data = await Course.getAll(search, offset, limit);
-    console.log(data);
     res.render("ds-baihoc", {
       data,
       totalPage,
@@ -64,11 +61,12 @@ module.exports = {
   // Trang form chỉnh sửa khóa học
   async showEditForm(req, res) {
     const id = req.params.id;
-    const course = await Course.getById(id);
-    if (!course) {
-      return res.render("error", { message: "Không tìm thấy khóa học" });
+    const lesson = await Course.getById(id);
+    const courses = await dsKhoahoc.getDs();
+    if (!lesson) {
+      return res.render("error", { message: "Không tìm thấy bài học" });
     }
-    res.render("edit-khoahoc", { title: "Chỉnh sửa khóa học", course });
+    res.render("edit-baihoc", { title: "Chỉnh sửa bài học", lesson, courses });
   },
 
   // Xử lý cập nhật khóa học
@@ -76,36 +74,29 @@ module.exports = {
     try {
       const id = req.params.id;
       const {
+        course_id,
         title,
         description,
-        difficulty_level,
-        estimated_duration,
-        is_free,
-        price,
-        instructor_id,
+        content_type,
+        content_url,
+        duration,
+        display_order,
       } = req.body;
-
-      const isDuplicate = await Course.checkDuplicateTitle(title, id);
-      if (isDuplicate) {
-        return res.send("Khóa học với tiêu đề này đã tồn tại.");
-      }
-
+      const is_preview = req.body.is_preview === "1" ? true : false;
+      //data update
       const dataUpdate = {
+        course_id,
         title,
         description,
-        difficulty_level,
-        estimated_duration,
-        is_free,
-        price,
-        instructor_id,
+        content_type,
+        content_url,
+        duration,
+        display_order,
+        is_preview,
       };
-
-      if (req.file) {
-        dataUpdate.thumbnail_url = "/images/" + req.file.filename;
-      }
-
+      //goivà truyền để update
       await Course.update(id, dataUpdate);
-      res.redirect("/admin/khoahoc/danhsach");
+      res.redirect("/admin/baihoc/danhsach");
     } catch (err) {
       console.error("Lỗi cập nhật:", err);
       res.send("Cập nhật thất bại");
@@ -114,11 +105,11 @@ module.exports = {
 
   // Xử lý xóa khóa học
   async remove(req, res) {
-    const id = req.params.id;
+    const id = req.params.id; //lấy req id trên urlurl
     try {
-      await Course.delete(id);
-      console.log("Đã xóa khóa học ID:", id);
-      res.redirect("/admin/khoahoc/danhsach");
+      await Course.delete(id); //gọi model xử lí
+      console.log("Đã xóa bài hoc ID:", id);
+      res.redirect("/admin/baihoc/danhsach");
     } catch (err) {
       console.error("Lỗi xóa:", err);
       res.status(500).send("Xóa thất bại");

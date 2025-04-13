@@ -29,7 +29,7 @@ module.exports = {
 
   //  Lấy chi tiết 1 khóa học theo ID
   async getById(id) {
-    const result = await query("SELECT * FROM Courses WHERE course_id = ?", [
+    const result = await query("SELECT * FROM Lessons WHERE lesson_id = ?", [
       id,
     ]);
     return result[0]; // trả về 1 object duy nhất
@@ -53,15 +53,15 @@ module.exports = {
     return await query(sql, values);
   },
 
-  //  Cập nhật khóa học
+  //  Cập nhật bài học
   async update(id, data) {
-    const sql = `UPDATE Courses SET ? WHERE course_id = ?`;
+    const sql = `UPDATE Lessons SET ? WHERE lesson_id = ?`;
     return await query(sql, [data, id]);
   },
 
   // Xóa khóa học
   async delete(id) {
-    return await query("DELETE FROM Courses WHERE course_id = ?", [id]);
+    return await query("DELETE FROM Lessons WHERE lesson_id = ?", [id]);
   },
 
   // Kiểm tra trùng tiêu đề khi sửa

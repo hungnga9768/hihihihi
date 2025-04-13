@@ -7,6 +7,10 @@ const query = util.promisify(db.query).bind(db);
 
 // Export object chứa các hàm xử lý database liên quan đến Courses
 module.exports = {
+  async getDs() {
+    let sql = "SELECT * FROM Courses";
+    return await query(sql);
+  },
   //  Lấy danh sách khóa học (có phân trang và tìm kiếm)
   async getAll(search, offset, limit) {
     let sql = "SELECT * FROM Courses";
