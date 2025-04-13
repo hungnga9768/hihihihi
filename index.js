@@ -30,7 +30,7 @@ app.use("/", routes);
 //   res.status(500).render("500", { title: "Lỗi server" });
 // });//
 //
-
+//jugjjugj
 app.use((req, res, next) => {
   console.log("Đang truy cập:", req.path);
   next();
