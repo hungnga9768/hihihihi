@@ -1,0 +1,123 @@
+<%- include('header')%> <%- include('aside')%>
+
+<!-- =============================================== -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>quản lý khóa học</h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <!-- Default box -->
+    <div class="box">
+      <div class="box-body">
+        <form
+          method="POST"
+          action="/admin/khoahoc/add-khoahoc"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group">
+            <label for="title">Tên khóa học</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="description">Mô tả</label>
+            <textarea
+              class="form-control"
+              id="description"
+              name="description"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="thumbnail">Ảnh bìa (chọn file)</label>
+            <input
+              type="file"
+              class="form-control"
+              id="thumbnail"
+              name="thumbnail"
+              accept="image/*"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="exampleSelect">Chọn cấp độ HSK</label>
+            <select
+              class="form-control"
+              id="exampleSelect"
+              name="difficulty_level"
+            >
+              <option value="">-- Chọn cấp độ --</option>
+              <option value="HSK1">HSK 1</option>
+              <option value="HSK2">HSK 2</option>
+              <option value="HSK3">HSK 3</option>
+              <option value="HSK4">HSK 4</option>
+              <option value="HSK5">HSK 5</option>
+              <option value="HSK6">HSK 6</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="estimated_duration">Thời lượng (giờ)</label>
+            <input
+              type="number"
+              class="form-control"
+              id="estimated_duration"
+              name="estimated_duration"
+              min="1"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="is_free">Khóa học miễn phí?</label>
+            <select class="form-control" id="is_free" name="is_free" required>
+              <option value="1">Có</option>
+              <option value="0" selected>Không</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="price">Giá (VNĐ)</label>
+            <input
+              type="number"
+              step="0.01"
+              class="form-control"
+              id="price"
+              name="price"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="instructor_id">ID Giảng viên</label>
+            <input
+              type="number"
+              class="form-control"
+              id="instructor_id"
+              name="instructor_id"
+              required
+            />
+          </div>
+          <div class="box-footer">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-plus"></i> Thêm khóa học
+            </button>
+            <a href="/quanlykhoahoc" class="btn btn btn-default pull-right">
+              <i class="fa fa-reply"></i> quay lại
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
+<%- include('footer')%>
