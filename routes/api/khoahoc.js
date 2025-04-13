@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../../middlewares/upload");
-const courseCtrl = require("../../app/controllers/admin/khoahoc.controllers");
+const courseCtrl = require("../../app/controllers/api/khoahoc.controllers");
 
 // Quản lý khóa học
 router.get("/danhsach", courseCtrl.index);

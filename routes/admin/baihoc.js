@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const baihocCtrl = require("../../app/controllers/baihoc.controller");
+const baihocCtrl = require("../../app/controllers/admin/baihoc.controller");
 
 // Quản lý khóa học
 router.get("/danhsach", baihocCtrl.index);

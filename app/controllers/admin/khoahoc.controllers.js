@@ -1,4 +1,4 @@
-const Course = require("../models/khoahoc");
+const Course = require("../../models/khoahoc");
 
 module.exports = {
   // Trang danh sách khóa học với phân trang & tìm kiếm

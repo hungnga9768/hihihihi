@@ -1,5 +1,5 @@
-const Course = require("../models/baihoc");
-const dsKhoahoc = require("../models/khoahoc");
+const Course = require("../../models/baihoc");
+const dsKhoahoc = require("../../models/khoahoc");
 module.exports = {
   // Trang danh sách khóa học với phân trang & tìm kiếm
   async index(req, res) {
@@ -21,7 +21,7 @@ module.exports = {
 
   // Trang form thêm khóa học
   async showAddForm(req, res) {
-    const courses = await Course.getDs();
+    const courses = await dsKhoahoc.getDs();
     res.render("add-baihoc", { courses });
   },
 
@@ -51,7 +51,7 @@ module.exports = {
       };
 
       await Course.create(newCourse);
-      res.redirect("/admin/khoahoc/danhsach");
+      res.redirect("/admin/baihoc/danhsach");
     } catch (err) {
       console.error("Lỗi thêm khóa học:", err);
       return res.render("error", {

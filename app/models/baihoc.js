@@ -14,8 +14,9 @@ module.exports = {
     sql += ` ORDER BY lesson_id DESC LIMIT ${offset}, ${limit}`; // phân trang
     return await query(sql);
   },
-  async getDs() {
+  async getDs(search) {
     let sql = "SELECT * FROM Lessons";
+    if (search) sql += ` WHERE title LIKE '%${search}%'`;
     return await query(sql);
   },
 

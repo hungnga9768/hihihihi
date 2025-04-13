@@ -52,3 +52,23 @@ $.widget.bridge('uibutton', $.ui.button)
 <script src="/dist/js/pages/dashboard.js"></script>
 </body>
 </html>
+<script>
+  function showImage(event) {
+    const input = event.target;
+    const currentImage = document.getElementById("currentImage");
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        currentImage.src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>
+<script>$(document).ready(function() {
+  $('.noidung').summernote({
+      minHeight: 100 // chiều cao tối thiểu
+  });
+});
+</script>
