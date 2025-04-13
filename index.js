@@ -28,7 +28,9 @@ app.use("/", routes);
 // app.use((err, req, res, next) => {
 //   console.error(err.stack);
 //   res.status(500).render("500", { title: "Lỗi server" });
-// });
+// });//
+//
+
 app.use((req, res, next) => {
   console.log("Đang truy cập:", req.path);
   next();
