@@ -93,7 +93,7 @@ module.exports = {
       //data update
       const isDuplicate = await lessons.checkDuplicateTitle(title, id);
       if (isDuplicate) {
-        return res.send("error");
+        return res.send("teen trung roi moi nhap lai ten");
       }
       const dataUpdate = {
         course_id,

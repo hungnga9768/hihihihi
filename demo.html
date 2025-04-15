@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Quản lý Admin</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        margin: 0;
+        padding: 20px;
+      }
+      h1 {
+        color: #333;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      th,
+      td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+      }
+      th {
+        background: #007bff;
+        color: white;
+      }
+      tr:hover {
+        background: #f1f1f1;
+      }
+      .actions button {
+        margin-right: 5px;
+        padding: 6px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      .edit-btn {
+        background: #ffc107;
+        color: white;
+      }
+      .delete-btn {
+        background: #dc3545;
+        color: white;
+      }
+      .add-btn {
+        background: #28a745;
+        color: white;
+        padding: 10px 16px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Quản lý quản trị viên</h1>
+
+    <button class="add-btn" onclick="addAdmin()">+ Thêm quản trị viên</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên</th>
+          <th>Email</th>
+          <th>Vai trò</th>
+          <th>Trạng thái</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="adminTable">
+        <!-- Dữ liệu sẽ được thêm bằng JavaScript -->
+      </tbody>
+    </table>
+
+    <script>
+      const admins = [
+        {
+          id: 1,
+          name: "Nguyễn Văn A",
+          email: "admin1@gmail.com",
+          role: "super_admin",
+          status: "active",
+        },
+        {
+          id: 2,
+          name: "Trần Thị B",
+          email: "content@gmail.com",
+          role: "content_manager",
+          status: "active",
+        },
+        {
+          id: 3,
+          name: "Lê Văn C",
+          email: "support@gmail.com",
+          role: "support",
+          status: "inactive",
+        },
+      ];
+
+      function renderAdmins() {
+        const table = document.getElementById("adminTable");
+        table.innerHTML = "";
+        admins.forEach((admin) => {
+          const row = `
+          <tr>
+            <td>${admin.id}</td>
+            <td>${admin.name}</td>
+            <td>${admin.email}</td>
+            <td>${admin.role}</td>
+            <td>${admin.status}</td>
+            <td class="actions">
+              <button class="edit-btn" onclick="editAdmin(${admin.id})">Sửa</button>
+              <button class="delete-btn" onclick="deleteAdmin(${admin.id})">Xóa</button>
+            </td>
+          </tr>
+        `;
+          table.innerHTML += row;
+        });
+      }
+
+      function addAdmin() {
+        const name = prompt("Nhập tên:");
+        const email = prompt("Nhập email:");
+        const role = prompt(
+          "Nhập vai trò (super_admin / content_manager / support):"
+        );
+        const id = admins.length + 1;
+        admins.push({ id, name, email, role, status: "active" });
+        renderAdmins();
+      }
+
+      function editAdmin(id) {
+        const admin = admins.find((a) => a.id === id);
+        if (!admin) return;
+        const name = prompt("Tên mới:", admin.name);
+        const email = prompt("Email mới:", admin.email);
+        admin.name = name;
+        admin.email = email;
+        renderAdmins();
+      }
+
+      function deleteAdmin(id) {
+        if (confirm("Bạn có chắc muốn xóa quản trị viên này không?")) {
+          const index = admins.findIndex((a) => a.id === id);
+          if (index > -1) admins.splice(index, 1);
+          renderAdmins();
+        }
+      }
+
+      renderAdmins();
+    </script>
+  </body>
+</html>
