@@ -4,11 +4,10 @@ const upload = require("../../middlewares/upload");
 const courseCtrl = require("../../app/controllers/api/khoahoc.controllers");
 
 // Quản lý khóa học
-router.get("/danhsach", courseCtrl.index);
-router.get("/add-khoahoc", courseCtrl.showAddForm);
-router.post("/add-khoahoc", upload.single("thumbnail"), courseCtrl.create);
-router.get("/edit-khoahoc/:id", courseCtrl.showEditForm);
-router.post("/edit-khoahoc/:id", upload.single("thumbnail"), courseCtrl.update);
-router.post("/delete-khoahoc/:id", courseCtrl.remove);
+router.get("/", courseCtrl.index);
+router.post("/", upload.single("thumbnail"), courseCtrl.create);
+router.get("/:id", courseCtrl.showEditForm);
+router.post("/:id", upload.single("thumbnail"), courseCtrl.update);
+router.post("/:id", courseCtrl.remove);
 
 module.exports = router;

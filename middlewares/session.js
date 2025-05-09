@@ -29,7 +29,7 @@ const sessionMiddleware = session({
   store: new CustomStore(),
   cookie: {
     secure: false, // true nếu dùng HTTPS
-    maxAge: 1000 * 60 * 60, // 1 giờ
+    maxAge: 1000 * 60 * 6000, // 1 giờ
   },
 });
 module.exports = sessionMiddleware;

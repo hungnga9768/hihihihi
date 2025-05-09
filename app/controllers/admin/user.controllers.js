@@ -22,7 +22,7 @@ module.exports = {
 
   // Trang form thêm user
   async showAddForm(req, res) {
-    res.render("add-user", { title: "Thêm khóa học" });
+    res.render("add-user", { title: "Thêm người dùng" });
   },
 
   // Xử lý thêm user

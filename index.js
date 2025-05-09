@@ -1,11 +1,11 @@
 const express = require("express");
+const cors = require("cors"); // thu vien lien ket font endend
 const path = require("path");
 const app = express();
-const bcrypt = require("bcrypt");
+require("dotenv").config();
+app.use(cors());
 const port = process.env.PORT || 3000; // Sử dụng biến môi trường nếu có
 const sessionMiddleware = require("./middlewares/session");
-
-// Cấu hình view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); // Chỉ rõ thư mục views
 // Middleware quan trọng
@@ -14,6 +14,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public"))); // Đường dẫn tuyệt đối
 // Xử lý favicon (tránh request không cần thiết)
 app.get("/favicon.ico", (req, res) => res.status(204));
+//Cho phép tất cả origin
+// hoặc app.use(cors({ origin: 'http://localhost:5173' })) nếu muốn cụ thể
+
 // Routes
 app.use(sessionMiddleware);
 const routes = require("./routes");

@@ -1,8 +1,8 @@
-module.exports = (req, res, next) => {
-  if (req.session.admin) {
-    // Kiểm tra session nếu có
-    return next(); // Nếu đã đăng nhập, tiếp tục xử lý
+// middlewares/auth.js
+module.exports = function (req, res, next) {
+  if (req.session && req.session.admins) {
+    next(); // Cho phép đi tiếp nếu đã đăng nhập
   } else {
-    res.redirect("/admin/login"); // Nếu chưa đăng nhập, chuyển về trang login
+    res.redirect("/admin/login"); // Hoặc trả về lỗi nếu chưa đăng nhập
   }
 };

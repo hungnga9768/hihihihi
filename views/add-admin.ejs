@@ -1,0 +1,142 @@
+<%- include('header')%> <%- include('aside')%>
+
+<!-- =============================================== -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1><%= title %></h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <!-- Default box -->
+    <div class="box">
+      <div class="box-body card card-primary">
+        <div class="card">
+          <div class="card-header">Điền các thông tin sau</div>
+          <div class="card-body">
+            <form
+              method="POST"
+              action="/admin/admins/add"
+              enctype="multipart/form-data"
+            >
+              <% if(message){ %>
+              <div class="alert alert-warning alert-dismissible">
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="alert"
+                  aria-hidden="true"
+                >
+                  ×
+                </button>
+                <%= message %>
+              </div>
+              <%}%>
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="username">Tên đăng nhập</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="password">Mật khẩu</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password_hash"
+                    required
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="full_name">Họ và tên đầy đủ</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="full_name"
+                    name="full_name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Ảnh dai diendien</label><br />
+                  <img
+                    id="currentImage"
+                    src="/dist/img/avatar4.png"
+                    width="150"
+                    class="avatar"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="avatar">Ảnh đại diện</label>
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="avatar"
+                    name="avatar"
+                    accept="image/*"
+                    onchange="showImage(event)"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="status">Trạng thái tài khoản</label>
+                  <select
+                    class="form-control"
+                    id="status"
+                    name="status"
+                    required
+                  >
+                    <option value="active">Hoạt động</option>
+                    <option value="inactive">Tạm khóa</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="role">Vai trò của quản trị viên</label>
+                  <select class="form-control" id="role" name="role" required>
+                    <option value="support">Nhân viên hỗ trợ</option>
+                    <option value="content_manager">Quản lý nội dung</option>
+                    <option value="super_admin">Quản trị viên</option>
+                  </select>
+                </div>
+
+                <div class="box-footer mt-3">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-plus"></i> Thêm quản trị viên
+                  </button>
+                  <a
+                    href="/admin/admins/danhsach"
+                    class="btn btn-default float-right"
+                  >
+                    <i class="fa fa-reply"></i> Quay lại danh sách
+                  </a>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer text-muted"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<%- include('footer')%>

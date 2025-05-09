@@ -4,21 +4,17 @@ module.exports = {
   // Trang danh sách khóa học với phân trang & tìm kiếm
   async index(req, res) {
     const search = req.query.search || "";
-    const page = parseInt(req.query.page) || 1;
-    const limit = 5;
-
-    const totalRow = await Course.getTotalRow(search);
-    const totalPage = Math.ceil(totalRow / limit);
-    const currentPage = Math.min(Math.max(page, 1), totalPage);
-    const offset = (currentPage - 1) * limit;
-
-    const data = await Course.getAll(search, offset, limit);
-
-    res.render("danhsach", {
-      data,
-      totalPage,
-      currentPage,
-      search,
+    // const page = parseInt(req.query.page) || 1;
+    // const limit = 5;
+    // const totalRow = await Course.getTotalRow(search);
+    // const totalPage = Math.ceil(totalRow / limit);
+    // const currentPage = Math.min(Math.max(page, 1), totalPage);
+    // const offset = (currentPage - 1) * limit;
+    const data = await Course.getDs(search);
+    res.send({
+      data: data ? data : [],
+      message: "lấy dữ liệu thành công",
+      code: 200,
     });
   },
 
