@@ -96,7 +96,18 @@
               value="<%= lesson.duration %>"
             />
           </div>
-    
+        <div class="form-group">
+              <label for="module_order">Bài học của module số</label>
+              <input
+                type="number"
+                class="form-control"
+                id="module_order"
+                name="module_order"
+                 value="<%= lesson.module_order %>"
+                required
+                min="1"
+                step="1"
+              />
           <div class="form-group">
             <label for="display_order">Thứ tự hiển thị</label>
             <input

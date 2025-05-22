@@ -39,7 +39,7 @@ module.exports = {
   //  Thêm khóa học mới
   async create(lesson) {
     const sql = `
-      INSERT INTO Lessons (course_id, title, description, content_type,content_url, duration, display_order, is_preview) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO Lessons (course_id, title, description, content_type,content_url, duration, display_order, is_preview,module_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
       lesson.course_id,
@@ -50,6 +50,7 @@ module.exports = {
       lesson.duration,
       lesson.display_order,
       lesson.is_preview,
+      lesson.module_order,
     ];
     return await query(sql, values);
   },
