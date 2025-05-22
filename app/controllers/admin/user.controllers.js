@@ -1,6 +1,8 @@
 const userModel = require("../../models/user");
 const bcrypt = require("bcrypt"); // phương thức mã hóa sản phẩm
 const saltRounds = 10; //số vòng mã hóa sản phẩm vòng càng cao thì chạy chậm
+const fs = require("fs");
+const path = require("path");
 module.exports = {
   // Trang danh sách khóa học với phân trang & tìm kiếm
   async index(req, res) {
@@ -17,27 +19,43 @@ module.exports = {
       totalPage,
       baihocPage,
       search,
+      title: "Danh sách người dùng",
     });
   },
 
   // Trang form thêm user
   async showAddForm(req, res) {
-    res.render("add-user", { title: "Thêm người dùng" });
+    const uploadedImages = fs // lấy danh sách ảnh đã update
+      .readdirSync(path.join(__dirname, "../../../public/images"))
+      .filter((file) => /\.(jpg|jpeg|png|gif)$/i.test(file));
+    res.render("add-user", { title: "Thêm mới người dùng", uploadedImages });
   },
 
   // Xử lý thêm user
   async create(req, res) {
     try {
-      const { username, email, full_name, account_status, subscription_type } =
-        req.body;
+      const {
+        username,
+        email,
+        full_name,
+        account_status,
+        subscription_type,
+        selected_image,
+        old_thumbnail_url,
+      } = req.body;
       // mã hóa mật khẩu trước khi thêm
       const password_hash = await bcrypt.hash(
         req.body.password_hash,
         saltRounds
       );
-      const profile_picture = req.file
-        ? "/images/" + req.file.filename
-        : "/dist/img/avatar4.png"; // ảnh mặc định
+      let profile_picture;
+      if (req.file) {
+        profile_picture = "/images/" + req.file.filename;
+      } else if (selected_image) {
+        profile_picture = selected_image;
+      } else {
+        profile_picture = old_thumbnail_url;
+      } // ảnh mặc định
       const subscription_expiry = req.body.subscription_expiry || null;
       const user = {
         username,
@@ -68,12 +86,18 @@ module.exports = {
 
   // Trang form chỉnh sửa user
   async showEditForm(req, res) {
+    const uploadedImages = fs // lấy danh sách ảnh đã update
+      .readdirSync(path.join(__dirname, "../../../public/images"));
     const id = req.params.id;
     const user = await userModel.getById(id);
     if (!user) {
       return res.render("error", { message: "Không tìm thấy bài học" });
     }
-    res.render("edit-user", { title: "Sửa thông tin người dùng", user });
+    res.render("edit-user", {
+      title: "Sửa thông tin người dùng",
+      user,
+      uploadedImages,
+    });
   },
   // Trang form update user
   async update(req, res) {
@@ -86,6 +110,8 @@ module.exports = {
         full_name,
         account_status,
         subscription_type,
+        selected_image,
+        old_thumbnail_url,
       } = req.body;
       const subscription_expiry = req.body.subscription_expiry || null;
       const isDuplicate = await userModel.checkDuplicateUsernameOrEmailUpdate(
@@ -101,17 +127,22 @@ module.exports = {
       const dataUpdate = {
         username,
         email,
-        password_hash,
         full_name,
         account_status,
         subscription_type,
         subscription_expiry,
       };
-
+      // mã hóa mật khẩu trước khi thêm
+      if (password_hash && password_hash.trim() !== "") {
+        dataUpdate.password_hash = await bcrypt.hash(password_hash, saltRounds);
+      }
       if (req.file) {
         dataUpdate.profile_picture = "/images/" + req.file.filename;
+      } else if (selected_image) {
+        dataUpdate.profile_picture = selected_image;
+      } else {
+        dataUpdate.profile_picture = old_thumbnail_url;
       }
-
       await userModel.update(id, dataUpdate);
       res.redirect("/admin/user/danhsach");
     } catch (err) {

@@ -14,6 +14,7 @@ module.exports = {
     const data = await dsBaitap.getAll(search, offset, limit);
     const listbaihoc = await dsBaihoc.getDs();
     res.render("ds-baitap", {
+      title: "Danh sách bài tập",
       data,
       totalPage,
       Page,
@@ -30,7 +31,7 @@ module.exports = {
       ? await dsBaitap.getById(exercise_set_id)
       : null;
     res.render("add-baitap", {
-      title: "THêm bài tập",
+      title: "Thêm mới bài tập",
       message: "",
       lessons,
       exerciseSet,
@@ -105,7 +106,7 @@ module.exports = {
       return res.render("error", { message: "Không tìm thấy bài học" });
     }
     res.render("edit-baitap", {
-      title: "Chỉnh sửa bai tap",
+      title: "Chỉnh sửa bài tập",
       baitap,
       baihoc,
       listcauhoi,

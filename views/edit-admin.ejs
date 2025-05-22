@@ -3,8 +3,20 @@
 <!-- =============================================== -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1>quản lý khóa học</h1>
+   <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1><%= title %></h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Tài liệu</li>
+          </ol>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Main content -->
@@ -56,26 +68,57 @@
               </div>
           
               <div class="form-group">
-                <label>Ảnh đại diện hiện tại</label><br />
-                <img
-                  id="currentImage"
-                  src="<%= admin.avatar ? admin.avatar : '/dist/img/avatar4.png' %>"
-                  width="150"
-                  class="avatar"
+                  <label>Ảnh đại diện hiện tại</label><br />
+                  <!-- Ảnh xem trước -->
+                  <img
+                    data-group="avatar"
+                    data-role="preview"
+                    src="<%= admin.avatar ? admin.avatar : '/dist/img/avatar4.png' %>"
+                    width="150"
+                    class="avatar"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <!-- Tên ảnh -->
+                  <p data-group="avatar" data-role="filename">
+                    <%= admin.avatar ? admin.avatar.split('/').pop() : 'avatar4.png' %>
+                  </p>
+
+                  <label for="avatar">Cập nhật ảnh đại diện</label>
+                  <!-- Input ảnh từ máy -->
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="avatar"
+                    name="avatar"
+                    accept="image/*"
+                    data-group="avatar"
+                    onchange="showImage(event, this)"
+                  />
+
+                  <!-- Nút chọn từ thư viện -->
+                  <button
+                    type="button"
+                    class="btn btn-secondary mt-2"
+                    data-group="avatar"
+                    onclick="openImageModal(this)"
+                  >
+                    Chọn từ thư viện
+                  </button>
+                  <input
+                    type="hidden"
+                    name="selected_image"
+                    data-group="avatar"
+                    data-role="selectedInput"
+/>
+                  <input
+                  type="hidden"
+                  name="old_thumbnail_url"
+                  value="<%= admin.avatar || '/dist/img/avatar4.png' %>"
                 />
-              </div>
-          
-              <div class="form-group">
-                <label for="avatar">Cập nhật ảnh đại diện </label>
-                <input
-                  type="file"
-                  class="form-control"
-                  id="avatar"
-                  name="avatar"
-                  accept="image/*"
-                  onchange="showImage(event)"
-                />
-              </div>
+                </div>
+
           
               <div class="form-group">
                 <label for="status">Trạng thái tài khoản</label>
@@ -113,6 +156,7 @@
                 </a>
               </div>
             </div>
+
           </form>
           
           </div>
@@ -122,4 +166,5 @@
     </div>
   </section>
 </div>
+<%- include('modalimage')%> 
 <%- include('footer')%>

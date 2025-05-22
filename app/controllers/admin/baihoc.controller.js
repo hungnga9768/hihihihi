@@ -16,13 +16,14 @@ module.exports = {
       totalPage,
       baihocPage,
       search,
+      title: "Danh sách bài học",
     });
   },
 
   // Trang form thêm khóa học
   async showAddForm(req, res) {
     const courses = await dsKhoahoc.getDs();
-    res.render("add-baihoc", { courses });
+    res.render("add-baihoc", { courses, title: "Thêm mới bài học" });
   },
 
   // Xử lý thêm khóa học

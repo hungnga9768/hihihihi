@@ -3,10 +3,21 @@
 <!-- =============================================== -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
-  <section class="content-header">
-    <h1><%= title %></h1>
+    <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1><%= title %></h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+            <li class="breadcrumb-item active">Tài liệu</li>
+          </ol>
+        </div>
+      </div>
+    </div>
   </section>
-
   <!-- Main content -->
   <section class="content">
     <!-- Default box -->
@@ -35,23 +46,56 @@
             ><%= course.description %></textarea>
           </div>
         
-          <!-- Có thể hiển thị ảnh cũ -->
           <div class="form-group">
-            <label>Ảnh hiện tại:</label><br />
-            <img id="currentImage" src="<%= course.thumbnail_url %>" width="150" class="img-thumbnail" />
-          </div>
-          
-          <div class="form-group">
-            <label for="thumbnail">Chọn ảnh mới (nếu muốn đổi)</label>
-            <input
-              type="file"
-              class="form-control"
-              id="thumbnail"
-              name="thumbnail"
-              accept="image/*"
-              onchange="showImage(event)"
-            />
-          </div>
+              <label>Ảnh đại diện hiện tại</label><br />
+              <!-- Ảnh xem trước -->
+              <img
+                data-group="uploadImage"
+                data-role="preview"
+                src="<%= course.thumbnail_url ? course.thumbnail_url : '/dist/img/avatar4.png' %>"
+                width="150"
+                class="thumbnail_url"
+              />
+            </div>
+
+            <div class="form-group">
+              <!-- Tên ảnh -->
+              <p data-group="uploadImage" data-role="filename"><%= course.thumbnail_url ? course.thumbnail_url.split('/').pop() : 'avatar4.png' %></p>
+
+              <label for="avatar">Cập nhật ảnh đại diện</label>
+              <!-- Input ảnh từ máy -->
+              <input
+                type="file"
+                class="form-control"
+                id="thumbnail_url"
+                name="thumbnail_url"
+                accept="image/*"
+                data-group="uploadImage"
+                onchange="showImage(event, this)"
+              />
+
+              <!-- Nút chọn từ thư viện -->
+              <button
+                type="button"
+                class="btn btn-secondary mt-2"
+                data-group="uploadImage"
+                onclick="openImageModal(this)"
+              >
+                Chọn từ thư viện
+              </button>
+              <input
+                type="hidden"
+                name="selected_image"
+                data-group="uploadImage"
+                data-role="selectedInput"
+              />
+              <input
+                type="hidden"
+                name="old_thumbnail_url"
+                value="<%= course.thumbnail_url || '/dist/img/avatar4.png' %>"
+              />
+            </div>
+             
           
           <div class="form-group">
             <label for="exampleSelect">Chọn cấp độ HSK</label>
@@ -128,4 +172,5 @@
     </div>
   </section>
 </div>
+<%- include('modalimage')%>
 <%- include('footer')%>

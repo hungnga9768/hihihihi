@@ -15,14 +15,14 @@ module.exports = {
     return await query(sql);
   },
   async getDs(search) {
-    let sql = "SELECT * FROM Lessons";
+    let sql = "SELECT * FROM ExerciseSets";
     if (search) sql += ` WHERE title LIKE '%${search}%'`;
     return await query(sql);
   },
 
   //  Lấy tổng số dòng (dùng để phân trang)
   async getTotalRow(search) {
-    let sql = "SELECT COUNT(*) AS totalRow FROM Lessons";
+    let sql = "SELECT COUNT(*) AS totalRow FROM ExerciseSets";
     if (search) sql += ` WHERE title LIKE '%${search}%'`; // điều kiện tìm kiếm
     const result = await query(sql);
     return result[0].totalRow; // trả về tổng số dòng
@@ -96,5 +96,24 @@ module.exports = {
   },
   async deletecauhoi(id) {
     return await query("DELETE FROM Exercises WHERE exercise_id = ?", [id]);
+  },
+  async getExerciseSetsWithQuestions() {
+    const sql = `
+      SELECT 
+        es.exercise_set_id,
+        es.lesson_id,
+        es.title,
+        es.description,
+        e.exercise_id,
+        e.exercise_type,
+        e.question,
+        e.options,
+        e.correct_answer,
+        e.explanation
+      FROM ExerciseSets es
+      LEFT JOIN Exercises e ON es.exercise_set_id = e.exercise_set_id
+      ORDER BY es.exercise_set_id, e.exercise_id
+    `;
+    return await query(sql);
   },
 };

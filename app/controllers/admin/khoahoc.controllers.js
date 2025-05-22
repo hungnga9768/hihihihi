@@ -1,5 +1,6 @@
 const Course = require("../../models/khoahoc");
-
+const fs = require("fs");
+const path = require("path");
 module.exports = {
   // Trang danh sách khóa học với phân trang & tìm kiếm
   async index(req, res) {
@@ -15,6 +16,7 @@ module.exports = {
     const data = await Course.getAll(search, offset, limit);
 
     res.render("danhsach", {
+      title: "Danh sách khóa học",
       data,
       totalPage,
       currentPage,
@@ -24,7 +26,10 @@ module.exports = {
 
   // Trang form thêm khóa học
   showAddForm(req, res) {
-    res.render("add-khoahoc", { title: "Thêm khóa học" });
+    const uploadedImages = fs // lấy danh sách ảnh đã update
+      .readdirSync(path.join(__dirname, "../../../public/images"))
+      .filter((file) => /\.(jpg|jpeg|png|gif)$/i.test(file));
+    res.render("add-khoahoc", { title: "Thêm khóa học", uploadedImages });
   },
 
   // Xử lý thêm khóa học
@@ -38,10 +43,18 @@ module.exports = {
         is_free,
         price,
         instructor_id,
+        selected_image,
+        old_thumbnail_url,
       } = req.body;
 
-      const thumbnail_url = "/images/" + req.file.filename;
-
+      let thumbnail_url;
+      if (req.file) {
+        thumbnail_url = "/images/" + req.file.filename;
+      } else if (selected_image) {
+        thumbnail_url = selected_image;
+      } else {
+        thumbnail_url = old_thumbnail_url;
+      }
       const newCourse = {
         title,
         description,
@@ -63,12 +76,19 @@ module.exports = {
 
   // Trang form chỉnh sửa khóa học
   async showEditForm(req, res) {
+    const uploadedImages = fs // lấy danh sách ảnh đã update
+      .readdirSync(path.join(__dirname, "../../../public/images"))
+      .filter((file) => /\.(jpg|jpeg|png|gif)$/i.test(file));
     const id = req.params.id;
     const course = await Course.getById(id);
     if (!course) {
       return res.render("error", { message: "Không tìm thấy khóa học" });
     }
-    res.render("edit-khoahoc", { title: "Chỉnh sửa khóa học", course });
+    res.render("edit-khoahoc", {
+      title: "Chỉnh sửa khóa học",
+      course,
+      uploadedImages,
+    });
   },
 
   // Xử lý cập nhật khóa học
@@ -83,6 +103,8 @@ module.exports = {
         is_free,
         price,
         instructor_id,
+        old_thumbnail_url,
+        selected_image,
       } = req.body;
 
       const isDuplicate = await Course.checkDuplicateTitle(title, id);
@@ -102,6 +124,10 @@ module.exports = {
 
       if (req.file) {
         dataUpdate.thumbnail_url = "/images/" + req.file.filename;
+      } else if (selected_image) {
+        dataUpdate.thumbnail_url = selected_image;
+      } else {
+        dataUpdate.thumbnail_url = old_thumbnail_url;
       }
 
       await Course.update(id, dataUpdate);

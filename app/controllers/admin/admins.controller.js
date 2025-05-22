@@ -1,6 +1,8 @@
 const admin = require("../../models/admin");
 const adminMd = require("../../models/admin");
 const bcrypt = require("bcrypt"); // thư viện mã hóa mật khẩu
+const fs = require("fs");
+const path = require("path");
 module.exports = {
   // Chức năng đăng nhập
   async showLogin(req, res) {
@@ -48,25 +50,49 @@ module.exports = {
       totalPage,
       baihocPage,
       search,
+      title: "Danh sách Admin",
     });
   },
   //show form thêm
   async showAddForm(req, res) {
-    res.render("add-admin", { title: "thêm admin", message: null });
+    const uploadedImages = fs // lấy danh sách ảnh đã update
+      .readdirSync(path.join(__dirname, "../../../public/images"))
+      .filter((file) => /\.(jpg|jpeg|png|gif)$/i.test(file));
+    res.render("add-admin", {
+      title: "Thêm mới Admin",
+      message: null,
+      uploadedImages,
+    });
   },
 
   // Xử lý thêm admin
   async create(req, res) {
     try {
-      const { username, email, full_name, status, role } = req.body;
+      const uploadedImages = fs // lấy danh sách ảnh đã update
+        .readdirSync(path.join(__dirname, "../../../public/images"))
+        .filter((file) => /\.(jpg|jpeg|png|gif)$/i.test(file));
+      const {
+        username,
+        email,
+        full_name,
+        status,
+        role,
+        selected_image,
+        old_thumbnail_url,
+      } = req.body;
       const saltRounds = 10; // độ dài mã hóa
       const password_hash = await bcrypt.hash(
         req.body.password_hash,
         saltRounds
       );
-      const avatar = req.file
-        ? "/images/" + req.file.filename
-        : "/dist/img/avatar4.png";
+      let avatar;
+      if (req.file) {
+        avatar = "/images/" + req.file.filename;
+      } else if (selected_image) {
+        avatar = selected_image;
+      } else {
+        avatar = old_thumbnail_url;
+      }
       const newCourse = {
         username,
         email,
@@ -82,8 +108,9 @@ module.exports = {
       );
       if (isDuplicate) {
         return res.render("add-admin", {
-          title: "thêm admin",
+          title: "Thêm mới admin",
           message: "Tên tài khoản hoặc emaill đã có trên hệ thống",
+          uploadedImages,
         });
       }
       await adminMd.create(newCourse);
@@ -110,16 +137,32 @@ module.exports = {
   async showEditForm(req, res) {
     const id = req.params.id;
     const admin = await adminMd.getById(id);
+    const uploadedImages = fs // lấy danh sách ảnh đã update
+      .readdirSync(path.join(__dirname, "../../../public/images"))
+      .filter((file) => /\.(jpg|jpeg|png|gif)$/i.test(file));
     if (!admin) {
       return res.render("error", { message: "Không tìm thấy bài học" });
     }
-    res.render("edit-admin", { title: "Sửa thông tin người dùng", admin });
+    res.render("edit-admin", {
+      title: "Sửa thông tin người dùng",
+      admin,
+      uploadedImages,
+    });
   },
   // Trang form update admin
   async update(req, res) {
     try {
       const id = req.params.id;
-      const { username, email, full_name, status, role } = req.body;
+      const {
+        username,
+        email,
+        full_name,
+        status,
+        role,
+        selected_image,
+        old_thumbnail_url,
+      } = req.body;
+      console.log(selected_image);
       const isDuplicate = await adminMd.checkDuplicateUsernameOrEmailUpdate(
         username,
         email,
@@ -140,10 +183,14 @@ module.exports = {
 
       if (req.file) {
         dataUpdate.avatar = "/images/" + req.file.filename;
+      } else if (selected_image) {
+        dataUpdate.avatar = selected_image;
+      } else {
+        dataUpdate.avatar = old_thumbnail_url;
       }
       console.log(dataUpdate);
       await adminMd.update(id, dataUpdate);
-      res.redirect("/admin/user/danhsach");
+      res.redirect("/admin/admins/danhsach");
     } catch (err) {
       console.error("Lỗi cập nhật:", err);
       res.send("Cập nhật thất bại");

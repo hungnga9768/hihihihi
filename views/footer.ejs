@@ -47,7 +47,6 @@ $.widget.bridge('uibutton', $.ui.button)
 <!-- AdminLTE App -->
 <script src="/dist/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
-<script src="/dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <!-- <script src="/dist/js/pages/dashboard.js"></script> -->
 </body>
@@ -66,9 +65,58 @@ $.widget.bridge('uibutton', $.ui.button)
     }
   }
 </script>
-<script>$(document).ready(function() {
+<script>
+
+$(document).ready(function() {
   $('.noidung').summernote({
       minHeight: 100 // chiều cao tối thiểu
   });
 });
+
+  let currentGroup = ""; // Nhóm đang thao tác
+
+  function openImageModal(button) {
+    currentGroup = button.getAttribute("data-group");
+    document.getElementById("imageModal").style.display = "block";
+  }
+
+  function closeImageModal() {
+    document.getElementById("imageModal").style.display = "none";
+  }
+
+  function selectImageFromModal(src, imgElem) {
+    // Bỏ chọn ảnh cũ
+    document.querySelectorAll("#imageGallery img").forEach((img) => {
+      img.style.borderColor = "transparent";
+    });
+
+    // Đánh dấu ảnh được chọn
+    imgElem.style.borderColor = "#007bff";
+
+    // Cập nhật ảnh xem trước, tên file
+    const preview = document.querySelector(`[data-group="${currentGroup}"][data-role="preview"]`);
+    const filename = document.querySelector(`[data-group="${currentGroup}"][data-role="filename"]`);
+    const fileInput = document.querySelector(`input[type="file"][data-group="${currentGroup}"]`);
+    const selectedInput = document.querySelector(`input[data-group="${currentGroup}"][data-role="selectedInput"]`);
+    if (preview) preview.src = src;
+    if (filename) filename.textContent = src.split("/").pop();
+    if (fileInput) fileInput.value = ""; // Reset file input nếu đã chọn từ thư viện
+    if (selectedInput) selectedInput.value = src;
+
+    closeImageModal();
+  }
+
+  function showImage(event, inputElem) {
+    const group = inputElem.getAttribute("data-group");
+    const reader = new FileReader();
+    reader.onload = function () {
+      const preview = document.querySelector(`[data-group="${group}"][data-role="preview"]`);
+      const filename = document.querySelector(`[data-group="${group}"][data-role="filename"]`);
+      if (preview) preview.src = reader.result;
+      if (filename) filename.textContent = "Ảnh mới tải lên";
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+
 </script>
