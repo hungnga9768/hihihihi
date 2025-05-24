@@ -5,6 +5,10 @@ const util = require("util");
 const query = util.promisify(db.query).bind(db);
 // Export object chứa các hàm xử lý database liên quan đến Courses
 module.exports = {
+  async check_emaill(email) {
+    const sql = "SELECT * FROM Users WHERE email = ?";
+    return await query(sql, [email]);
+  },
   async getDs() {
     let sql = "SELECT * FROM Courses";
     return await query(sql);
@@ -82,7 +86,6 @@ module.exports = {
         [username, email],
         (err, rows) => {
           if (err) return reject(err);
-          console.log("row", rows);
           resolve(rows.length > 0); // Kiểm tra xem có kết quả trả về không
         }
       );

@@ -7,14 +7,16 @@ const user = require("./user");
 const admin = require("./admins");
 const baitap = require("./baitap");
 const tailieu = require("./tailieu");
-const authMiddleware = require("../../middlewares/auth");
+const authenticateToken = require("../../middlewares/authenticateToken");
 router.get("/", (req, res) => {
   res.render("home");
 });
 router.get("/login", admins.showLogin);
 router.post("/login", admins.checkLogin);
 router.get("/logout", admins.Logout);
-// router.use(authMiddleware);
+
+router.use(authenticateToken);
+
 router.use("/khoahoc", khoahoc);
 router.use("/baihoc", baihoc);
 router.use("/admins", admin);

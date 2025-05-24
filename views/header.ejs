@@ -234,6 +234,39 @@
               <i class="fas fa-th-large"></i>
             </a>
           </li>
+          <li class="nav-item dropdown user-menu">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+              <img
+                src="<%= user?.avatar %>"
+                class="user-image img-circle elevation-2"
+                alt="User Image"
+              />
+              <span class="d-none d-md-inline"><%= user?.username %></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+              <!-- User image -->
+              <li class="user-header bg-primary">
+                <img
+                  src="<%= user?.avatar %>"
+                  class="img-circle elevation-2"
+                  alt="User Image"
+                />
+                <p>
+                  <%= user?.full_name %>
+                  <small>Đăng nhập gần đây</small>
+                </p>
+              </li>
+              <!-- Menu Footer-->
+              <li class="user-footer">
+                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                <a
+                  href="/admin/logout"
+                  class="btn btn-default btn-flat float-right"
+                  >Sign out</a
+                >
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <!-- /.navbar -->

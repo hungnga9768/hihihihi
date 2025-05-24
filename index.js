@@ -1,11 +1,13 @@
 const express = require("express");
 const cors = require("cors"); // thu vien lien ket font endend
 const path = require("path");
+const cookieParser = require("cookie-parser");
 const app = express();
+app.use(cookieParser());
 require("dotenv").config();
-app.use(cors());
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 const port = process.env.PORT || 3000; // Sử dụng biến môi trường nếu có
-const sessionMiddleware = require("./middlewares/session");
+// const sessionMiddleware = require("./middlewares/session");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); // Chỉ rõ thư mục views
 // Middleware quan trọng
@@ -18,7 +20,8 @@ app.get("/favicon.ico", (req, res) => res.status(204));
 // hoặc app.use(cors({ origin: 'http://localhost:5173' })) nếu muốn cụ thể
 
 // Routes
-app.use(sessionMiddleware);
+
+// app.use(sessionMiddleware);
 const routes = require("./routes");
 app.use("/", routes);
 

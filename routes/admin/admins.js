@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../../middlewares/upload");
 const adminsCtl = require("../../app/controllers/admin/admins.controller");
-const authMiddleware = require("../../middlewares/auth");
 // Quản lý admin
 router.get("/danhsach", adminsCtl.index);
 router.get("/add", adminsCtl.showAddForm);

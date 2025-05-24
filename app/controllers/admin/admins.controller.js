@@ -3,6 +3,11 @@ const adminMd = require("../../models/admin");
 const bcrypt = require("bcrypt"); // thư viện mã hóa mật khẩu
 const fs = require("fs");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
+
 module.exports = {
   // Chức năng đăng nhập
   async showLogin(req, res) {
@@ -27,14 +32,39 @@ module.exports = {
         message: "Mật khẩu không chính xác",
       });
     }
+    const userInfo = {
+      admin_id: user[0].admin_id,
+      username: user[0].username,
+      email: user[0].email,
+      full_name: user[0].full_name,
+      avatar: user[0].avatar,
+    };
 
-    // Đăng nhập Thành công
-    req.session.admins = user;
+    const accessToken = jwt.sign(userInfo, ACCESS_TOKEN_SECRET, {
+      expiresIn: "15m",
+    });
+    const refreshToken = jwt.sign(userInfo, REFRESH_TOKEN_SECRET, {
+      expiresIn: "7d",
+    });
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      maxAge: 15 * 60 * 1000, // 15 phút
+    });
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
+    });
     res.redirect("/admin");
   },
   // Chức năng đăng xuất
   async Logout(req, res) {
-    fd;
+    try {
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
+      res.redirect("admin/login");
+    } catch (error) {
+      res.render("err", { message: "đăng xuất thất bại" });
+    }
   },
   async index(req, res) {
     const search = req.query.search || "";
@@ -188,7 +218,6 @@ module.exports = {
       } else {
         dataUpdate.avatar = old_thumbnail_url;
       }
-      console.log(dataUpdate);
       await adminMd.update(id, dataUpdate);
       res.redirect("/admin/admins/danhsach");
     } catch (err) {
