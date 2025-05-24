@@ -5,18 +5,18 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
 function authenticateToken(req, res, next) {
-  const accessToken = req.cookies?.accessToken;
-  const refreshToken = req.cookies?.refreshToken;
+  const accessToken_admin = req.cookies?.accessToken_admin;
+  const refreshToken_admin = req.cookies?.refreshToken_admin;
 
-  if (!accessToken) {
+  if (!accessToken_admin) {
     // Không có access token, thử refresh
-    return tryRefreshToken(refreshToken, req, res, next);
+    return tryRefreshToken(refreshToken_admin, req, res, next);
   }
 
-  jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, user) => {
+  jwt.verify(accessToken_admin, ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
-      // accessToken hết hạn → thử refresh
-      return tryRefreshToken(refreshToken, req, res, next);
+      // accessToken_admin hết hạn → thử refresh
+      return tryRefreshToken(refreshToken_admin, req, res, next);
     }
 
     req.user = user;
@@ -24,10 +24,10 @@ function authenticateToken(req, res, next) {
   });
 }
 
-function tryRefreshToken(refreshToken, req, res, next) {
-  if (!refreshToken) return res.redirect("/admin/login");
+function tryRefreshToken(refreshToken_admin, req, res, next) {
+  if (!refreshToken_admin) return res.redirect("/admin/login");
 
-  jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, user) => {
+  jwt.verify(refreshToken_admin, REFRESH_TOKEN_SECRET, (err, user) => {
     if (err) return res.redirect("/admin/login");
 
     // Tạo lại access token
@@ -43,7 +43,7 @@ function tryRefreshToken(refreshToken, req, res, next) {
       expiresIn: "15m",
     });
 
-    res.cookie("accessToken", newAccessToken, {
+    res.cookie("accessToken_admin", newAccessToken, {
       httpOnly: true,
       maxAge: 15 * 60 * 1000,
     });

@@ -40,17 +40,17 @@ module.exports = {
       avatar: user[0].avatar,
     };
 
-    const accessToken = jwt.sign(userInfo, ACCESS_TOKEN_SECRET, {
+    const accessToken_admin = jwt.sign(userInfo, ACCESS_TOKEN_SECRET, {
       expiresIn: "15m",
     });
-    const refreshToken = jwt.sign(userInfo, REFRESH_TOKEN_SECRET, {
+    const refreshToken_admin = jwt.sign(userInfo, REFRESH_TOKEN_SECRET, {
       expiresIn: "7d",
     });
-    res.cookie("accessToken", accessToken, {
+    res.cookie("accessToken_admin", accessToken_admin, {
       httpOnly: true,
       maxAge: 15 * 60 * 1000, // 15 phút
     });
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie("refreshToken_admin", refreshToken_admin, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
     });
@@ -59,8 +59,8 @@ module.exports = {
   // Chức năng đăng xuất
   async Logout(req, res) {
     try {
-      res.clearCookie("accessToken");
-      res.clearCookie("refreshToken");
+      res.clearCookie("accessToken_admin");
+      res.clearCookie("refreshToken_admin");
       res.redirect("admin/login");
     } catch (error) {
       res.render("err", { message: "đăng xuất thất bại" });
