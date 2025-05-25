@@ -6,7 +6,7 @@ const query = util.promisify(db.query).bind(db);
 // Export object chứa các hàm xử lý database liên quan đến Courses
 module.exports = {
   async check_emaill(email) {
-    const sql = "SELECT * FROM Users WHERE email = ?";
+    const sql = "SELECT * FROM users WHERE email = ?";
     return await query(sql, [email]);
   },
   async getDs() {
@@ -15,7 +15,7 @@ module.exports = {
   },
   //  Lấy danh sách khóa học (có phân trang và tìm kiếm)
   async getAll(search, offset, limit) {
-    let sql = "SELECT * FROM Users";
+    let sql = "SELECT * FROM users";
     if (search) sql += ` WHERE username LIKE '%${search}%'`; // nếu có từ khóa
     sql += ` ORDER BY user_id DESC LIMIT ${offset}, ${limit}`; // phân trang
     return await query(sql);
@@ -23,7 +23,7 @@ module.exports = {
 
   //  Lấy tổng số dòng (dùng để phân trang)
   async getTotalRow(search) {
-    let sql = "SELECT COUNT(*) AS totalRow FROM Users";
+    let sql = "SELECT COUNT(*) AS totalRow FROM users";
     if (search) sql += ` WHERE username LIKE '%${search}%'`; // điều kiện tìm kiếm
     const result = await query(sql);
     return result[0].totalRow; // trả về tổng số dòng
@@ -31,14 +31,14 @@ module.exports = {
 
   //  Lấy chi tiết 1 khóa học theo ID
   async getById(id) {
-    const result = await query("SELECT * FROM Users WHERE user_id = ?", [id]);
+    const result = await query("SELECT * FROM users WHERE user_id = ?", [id]);
     return result[0]; // trả về 1 object duy nhất
   },
 
   //  Thêm khóa học mới
   async create(user) {
     const sql = `
-      INSERT INTO Users (username, email, password_hash, full_name, profile_picture, account_status, subscription_type, subscription_expiry)
+      INSERT INTO users (username, email, password_hash, full_name, profile_picture, account_status, subscription_type, subscription_expiry)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
@@ -56,20 +56,20 @@ module.exports = {
 
   //  Cập nhật khóa học
   async update(id, data) {
-    const sql = `UPDATE Users SET ? WHERE user_id = ?`;
+    const sql = `UPDATE users SET ? WHERE user_id = ?`;
     return await query(sql, [data, id]);
   },
 
   // Xóa khóa học
   async delete(id) {
-    return await query("DELETE FROM Users WHERE user_id = ?", [id]);
+    return await query("DELETE FROM users WHERE user_id = ?", [id]);
   },
 
   // Kiểm tra trùng tiêu đề khi sửa
   async checkDuplicateUsernameOrEmailUpdate(username, email, userId) {
     return new Promise((resolve, reject) => {
       db.query(
-        `SELECT * FROM Users WHERE (username = ? OR email = ?) AND user_id != ?`,
+        `SELECT * FROM users WHERE (username = ? OR email = ?) AND user_id != ?`,
         [username, email, userId],
         (err, rows) => {
           if (err) return reject(err);
@@ -82,7 +82,7 @@ module.exports = {
   async checkDuplicateUsernameOrEmail(username, email) {
     return new Promise((resolve, reject) => {
       db.query(
-        "SELECT * FROM Users WHERE username = ? OR email = ?",
+        "SELECT * FROM users WHERE username = ? OR email = ?",
         [username, email],
         (err, rows) => {
           if (err) return reject(err);
